@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.*;
 @Repository
 public interface UserTelegramRepository extends JpaRepository<UserTelegram,Long> {
 
+
+    UserTelegram findOneByTelegramId(Integer id);
 }

@@ -80,9 +80,12 @@ jhipster:
         cache: # Used by the CachingHttpHeadersFilter
             timeToLiveInDays: 1461
     security:
-        remember-me:
-            # security key (this key should be unique for your application, and kept secret)
-            key: 9df7281f4e832f7fcba4566c0af76a8062e31016
+        authentication:
+            jwt:
+                secret: af0d6dc0f4d291e028ee5423c6cf5a2198942277
+                # Token is valid 24 hours
+                token-validity-in-seconds: 86400
+                token-validity-in-seconds-for-remember-me: 2592000
     mail: # specific JHipster mail property, for standard properties see MailProperties
         from: foodlogbotadm@localhost
         base-url: http://my-server-url-to-change # Modify according to your server's URL

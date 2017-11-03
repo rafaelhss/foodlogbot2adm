@@ -43,8 +43,8 @@ public class ScheduledMealResourceIntTest {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TARGET_TIME = "20:49";
-    private static final String UPDATED_TARGET_TIME = "10:05";
+    private static final String DEFAULT_TARGET_TIME = "23:35";
+    private static final String UPDATED_TARGET_TIME = "23:40";
 
     @Autowired
     private ScheduledMealRepository scheduledMealRepository;

@@ -8,7 +8,7 @@
     "packageName": "com.foodlog",
     "packageFolder": "com/foodlog",
     "serverPort": "8080",
-    "authenticationType": "session",
+    "authenticationType": "jwt",
     "hibernateCache": "no",
     "clusteredHttpSession": false,
     "websocket": false,
@@ -20,13 +20,13 @@
     "serviceDiscoveryType": false,
     "buildTool": "maven",
     "enableSocialSignIn": false,
-    "rememberMeKey": "9df7281f4e832f7fcba4566c0af76a8062e31016",
     "clientFramework": "angular1",
     "useSass": false,
     "clientPackageManager": "yarn",
     "applicationType": "monolith",
     "testFrameworks": [],
     "jhiPrefix": "jhi",
-    "enableTranslation": false
+    "enableTranslation": false,
+    "jwtSecretKey": "af0d6dc0f4d291e028ee5423c6cf5a2198942277"
   }
 }
