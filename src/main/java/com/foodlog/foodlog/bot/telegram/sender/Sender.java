@@ -14,6 +14,11 @@ public class Sender {
     protected String UrlTemplate      = "https://api.telegram.org/bot@@BOTID@@/sendmessage?chat_id=@@CHATID@@&text=@@TEXT@@";
     protected String UrlImageTemplate = "https://api.telegram.org/bot@@BOTID@@/sendPhoto?chat_id=@@CHATID@@";
 
+    //para testes
+    public Sender(){
+        this.botId = "TESTE";
+        this.UrlTemplate = UrlTemplate.replace("@@BOTID@@", botId);
+    }
 
     public Sender(String botId){
         this.botId = botId;
@@ -21,6 +26,7 @@ public class Sender {
     }
 
     public void sendResponse(Integer id, String text_response) throws IOException {
+        System.out.println("Sending response....");
         text_response = URLEncoder.encode(text_response, "UTF-8");
         URL url = new URL(UrlTemplate.replace("@@CHATID@@", id.toString()).replace("@@TEXT@@", text_response));
 

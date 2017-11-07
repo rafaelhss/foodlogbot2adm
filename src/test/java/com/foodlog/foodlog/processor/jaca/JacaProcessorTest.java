@@ -6,6 +6,7 @@ import com.foodlog.foodlog.bot.telegram.model.Message;
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.bot.telegram.model.User;
 import com.foodlog.foodlog.sender.TestSender;
+import com.foodlog.foodlog.util.TestUtil;
 import com.foodlog.repository.JacaRepository;
 import com.foodlog.repository.UserRepository;
 import com.foodlog.repository.UserTelegramRepository;
@@ -37,10 +38,10 @@ public class JacaProcessorTest {
     private JacaRepository jacaRepository;
 
     @Autowired
-    private UserTelegramRepository userTelegramRepository;
+    private TestUtil testUtil;
 
-    @Autowired
-    private UserRepository userRepository;
+
+
 
 
 
@@ -48,14 +49,10 @@ public class JacaProcessorTest {
     @Test
     public void process() throws Exception {
 
-
-
         Update update = getUpdate();
 
         jacaProcessor.setUpdate(update);
         jacaProcessor.setSender(new TestSender());
-
-
 
         int qtd = (int) jacaRepository.count();
 
@@ -63,27 +60,11 @@ public class JacaProcessorTest {
 
         Assert.assertEquals(qtd + 1, jacaRepository.count());
 
-
     }
 
     @Before
-    public void createUser() {
-        Integer id = 153350155;
-
-        UserTelegram userTelegram = userTelegramRepository.findOneByTelegramId(id);
-        if(userTelegram == null) {
-            userTelegram = new UserTelegram();
-        }
-
-
-
-        userTelegram.setTelegramId(id);
-        com.foodlog.domain.User admin = userRepository.findOneByLogin("admin").get();
-        System.out.println(admin);
-        userTelegram.setUser(admin);
-
-        userTelegramRepository.save(userTelegram);
-
+    public void setup() {
+        testUtil.createUser();
     }
 
     @Test

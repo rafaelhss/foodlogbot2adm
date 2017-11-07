@@ -46,7 +46,6 @@ public abstract class Processor {
 
     protected User getCurrentUser(Update update) {
         final Integer id = update.getMessage().getFrom().getId();
-        System.out.println(id);
         UserTelegram user = userTelegramRepository.findOneByTelegramId(id);
         return user.getUser();
     }

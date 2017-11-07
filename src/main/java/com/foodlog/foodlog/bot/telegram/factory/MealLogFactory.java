@@ -28,6 +28,9 @@ import java.util.List;
 @Service
 public class MealLogFactory {
 
+    public static final int DEFAULT_RATING = 3;
+    @Autowired
+    private ScheduledMealRepository scheduledMealRepository;
 
     public byte[] getPicture(Update update) {
         int id = update.getMessage().getPhoto().size() -1 ;
@@ -35,16 +38,92 @@ public class MealLogFactory {
 
         RestTemplate restTemplate = new RestTemplate();
         URI getFileurl = ApiUrlBuilder.getGetFile(file_id);
-        System.out.println("url:" + getFileurl.toString());
         GetFile getFile = (GetFile) restTemplate.getForObject(getFileurl, GetFile.class);
-
-
-        System.out.println("result:" + getFile.getResult().getFile_path());
 
         //https://api.telegram.org/file/bot<token>/<file_path>
 
         String file_path = getFile.getResult().getFile_path();
         URI getBytesurl = ApiUrlBuilder.getBytesUrl(file_path);
         return restTemplate.getForObject(getBytesurl, byte[].class);
+    }
+
+    public MealLog create(Update update, User current) {
+
+        MealLog mealLog = getBaseMealLog(update, current);
+
+        //Photo
+        byte[] imageBytes = getPicture(update);
+        mealLog.setPhoto(DatatypeConverter.parseBase64Binary(DatatypeConverter.printBase64Binary(imageBytes)));
+        mealLog.setPhotoContentType("image/jpg");
+
+        return mealLog;
+    }
+    private MealLog getBaseMealLog(Update update, User current){
+        MealLog mealLog = new MealLog();
+
+        //Date = now
+        mealLog.setMealDateTime(update.getUpdateDateTime());
+
+        //Comment = caption
+        String caption = update.getMessage().getCaption();
+        if(caption != null) {
+            mealLog.setComment((caption.trim()));
+        }
+
+        //ScheduledMeal
+        ScheduledMeal scheduledMeal = defineScheduledMeal(mealLog, current);
+        mealLog.setScheduledMeal(scheduledMeal);
+
+        mealLog.setUpdateId(update.getUpdate_id());
+
+        //Valor Default
+        mealLog.setRating(DEFAULT_RATING);
+
+        mealLog.setUser(current);
+
+        return mealLog;
+    }
+
+    private ScheduledMeal defineScheduledMeal(MealLog mealLog, User currentUser) {
+        try {
+
+            if(mealLog.getComment() != null && !mealLog.getComment().isEmpty()){
+                List<ScheduledMeal> scheduledMeals = scheduledMealRepository.findByNameAndUser(mealLog.getComment(), currentUser);
+                if(scheduledMeals != null && !scheduledMeals.isEmpty()){
+                    return scheduledMeals.get(0);
+                }
+            }
+
+
+            for (ScheduledMeal scheduledMeal : scheduledMealRepository.findAll()) {
+                if(checkTime(scheduledMeal, mealLog.getMealDateTime())) {
+                    return scheduledMeal;
+                }
+            }
+        } catch (Exception ex){
+            System.out.println("errrxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    private boolean checkTime(ScheduledMeal scheduledMeal, Instant mealDateTime)  {
+        String time[] = scheduledMeal.getTargetTime().split(":");
+
+        ZonedDateTime now = mealDateTime.atZone(ZoneId.of("America/Sao_Paulo"));
+
+        int hour = Integer.parseInt(time[0]);
+        int minute = Integer.parseInt(time[1]);
+        ZonedDateTime target = now.with(LocalTime.of(hour, minute));
+
+        ZonedDateTime after = target.plusMinutes(30);
+        ZonedDateTime before = target.minusMinutes(30);
+
+        return (target.isBefore(after) && target.isAfter(before));
+    }
+
+    //para testes
+    public void setScheduledMealRepository(ScheduledMealRepository scheduledMealRepository) {
+        this.scheduledMealRepository = scheduledMealRepository;
     }
 }
