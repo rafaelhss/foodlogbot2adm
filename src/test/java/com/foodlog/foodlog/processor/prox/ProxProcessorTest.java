@@ -6,7 +6,6 @@ import com.foodlog.foodlog.bot.telegram.model.Message;
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.bot.telegram.model.User;
 import com.foodlog.foodlog.bot.telegram.sender.Sender;
-import com.foodlog.foodlog.sender.TestSender;
 import com.foodlog.foodlog.util.TestUtil;
 import org.junit.Assert;
 import org.junit.Before;
@@ -81,7 +80,9 @@ public class ProxProcessorTest {
 
 
         proxProcessor.setUpdate(update);
-        proxProcessor.setSender(new TestSender());
+        Mockito.doNothing().when(senderMock).sendResponse(null, "");
+
+        proxProcessor.setSender(senderMock);
 
         Assert.assertEquals(true, proxProcessor.check());
 

@@ -8,16 +8,16 @@ import com.foodlog.foodlog.bot.telegram.model.Message;
 import com.foodlog.foodlog.bot.telegram.model.Photo;
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.bot.telegram.model.User;
-import com.foodlog.foodlog.sender.TestSender;
+import com.foodlog.foodlog.bot.telegram.sender.Sender;
 import com.foodlog.foodlog.util.TestUtil;
 import com.foodlog.repository.MealLogRepository;
 import com.foodlog.repository.ScheduledMealRepository;
 import com.google.common.io.ByteStreams;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +59,9 @@ public class PhotoProcessorTest {
 
     private ScheduledMeal scheduledMeal;
 
+    @Mock
+    private Sender senderMock;
+
     @Test
     public void process() throws Exception {
 
@@ -71,7 +74,10 @@ public class PhotoProcessorTest {
         mealLogFactory.setScheduledMealRepository(scheduledMealRepository);
         photoProcessor.setMealLogFactory(mealLogFactory);
         photoProcessor.setUpdate(update);
-        photoProcessor.setSender(new TestSender());
+
+        Mockito.doNothing().when(senderMock).sendResponse(null, "");
+
+        photoProcessor.setSender(senderMock);
 
 
         MealLog mealLog = buildMealLog(imagem);

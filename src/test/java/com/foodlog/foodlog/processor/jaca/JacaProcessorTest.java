@@ -1,27 +1,23 @@
 package com.foodlog.foodlog.processor.jaca;
 
 import com.foodlog.FoodlogbotadmApp;
-import com.foodlog.domain.UserTelegram;
 import com.foodlog.foodlog.bot.telegram.model.Message;
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.bot.telegram.model.User;
-import com.foodlog.foodlog.sender.TestSender;
+import com.foodlog.foodlog.bot.telegram.sender.Sender;
 import com.foodlog.foodlog.util.TestUtil;
 import com.foodlog.repository.JacaRepository;
-import com.foodlog.repository.UserRepository;
-import com.foodlog.repository.UserTelegramRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
-import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by rafael on 03/11/17.
@@ -40,10 +36,8 @@ public class JacaProcessorTest {
     @Autowired
     private TestUtil testUtil;
 
-
-
-
-
+    @Mock
+    private Sender senderMock;
 
 
     @Test
@@ -52,7 +46,9 @@ public class JacaProcessorTest {
         Update update = getUpdate();
 
         jacaProcessor.setUpdate(update);
-        jacaProcessor.setSender(new TestSender());
+        Mockito.doNothing().when(senderMock).sendResponse(null, "");
+
+        jacaProcessor.setSender(senderMock);
 
         int qtd = (int) jacaRepository.count();
 
@@ -73,7 +69,9 @@ public class JacaProcessorTest {
 
 
         jacaProcessor.setUpdate(update);
-        jacaProcessor.setSender(new TestSender());
+        Mockito.doNothing().when(senderMock).sendResponse(null, "");
+
+        jacaProcessor.setSender(senderMock);
 
         Assert.assertEquals(true, jacaProcessor.check());
 
