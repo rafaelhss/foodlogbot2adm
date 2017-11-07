@@ -26,8 +26,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.InputStream;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by rafael on 03/11/17.
@@ -36,7 +38,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = FoodlogbotadmApp.class)
 public class PhotoProcessorTest {
-    public static final long UPDATE_ID = 123456L;
+    public static final long UPDATE_ID = new Random().nextLong();
     public static Integer CHAT_ID_RAFA = 153350155;
 
     @Autowired
@@ -110,8 +112,9 @@ public class PhotoProcessorTest {
 
     @Before
     public void setup(){
-testUtil.createUser();
-        scheduledMeal = testUtil.createScheduledMeal(Instant.now());
+        testUtil.createUser();
+
+        scheduledMeal = testUtil.createScheduledMeal(ZonedDateTime.now(), "Scheduled Meal @TIME@ Test ");
     }
 
 

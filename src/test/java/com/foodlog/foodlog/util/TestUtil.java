@@ -46,16 +46,13 @@ public class TestUtil {
     }
 
 
-    public ScheduledMeal createScheduledMeal(Instant time) {
-        return createScheduledMeal(ZonedDateTime.from(time), "Scheduled Meal [" + time.toString() + "]["+new Random().nextInt()+"] Test ");
-    }
-
     public ScheduledMeal createScheduledMeal(ZonedDateTime time, String name) {
         String targetTime = time.toString();
 
         targetTime = targetTime.substring(targetTime.indexOf("T")+1);
         targetTime = targetTime.substring(0,targetTime.indexOf(":") + 3);
 
+        name  = name.replace("@@TIME", targetTime);
         return createScheduledMeal(targetTime, name);
     }
 

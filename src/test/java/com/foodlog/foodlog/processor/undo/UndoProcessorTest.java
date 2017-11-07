@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
+import java.util.Random;
 
 import static org.junit.Assert.*;
 
@@ -33,7 +34,7 @@ import static org.junit.Assert.*;
 @SpringBootTest(classes = FoodlogbotadmApp.class)
 public class UndoProcessorTest {
 
-    private static final Long UPDATE_ID = 12345646L;
+    private static final Long UPDATE_ID = new Random().nextLong();
     public static Integer CHAT_ID_RAFA = 153350155;
 
 
@@ -62,9 +63,9 @@ public class UndoProcessorTest {
     @Test
     public void processMealogFoiUltimo() throws Exception {
 
-        mealLogRepository.save(buildMealLog(Instant.now()));
-        bodyLogRepository.save(buildBodyLog(Instant.now().minusSeconds(1000)));
-        weightRepository.save(buildWeight(Instant.now().minusSeconds(2000)));
+        mealLogRepository.save(buildMealLog(Instant.now().plusSeconds(10000)));
+        bodyLogRepository.save(buildBodyLog(Instant.now().plusSeconds(1000)));
+        weightRepository.save(buildWeight(Instant.now().plusSeconds(2000)));
 
         long mealLogCount = mealLogRepository.count();
         long bodyLogCount = bodyLogRepository.count();
@@ -89,8 +90,8 @@ public class UndoProcessorTest {
     public void processMealogNAOFoiUltimo() throws Exception {
 
         mealLogRepository.save(buildMealLog(Instant.now().minusSeconds(3000)));
-        bodyLogRepository.save(buildBodyLog(Instant.now().minusSeconds(1000)));
-        weightRepository.save(buildWeight(Instant.now().minusSeconds(2000)));
+        bodyLogRepository.save(buildBodyLog(Instant.now().plusSeconds(10000)));
+        weightRepository.save(buildWeight(Instant.now().plusSeconds(2000)));
 
         long mealLogCount = mealLogRepository.count();
         long bodyLogCount = bodyLogRepository.count();
@@ -107,7 +108,12 @@ public class UndoProcessorTest {
         undoProcessor.process();
 
         Assert.assertEquals(weightCount, weightRepository.count());
-        Assert.assertEquals(bodyLogCount-1, bodyLogRepository.count());
+
+        long somaEsperada = bodyLogCount + weightCount - 1;
+        long somaActual = bodyLogRepository.count() + weightRepository.count();
+
+
+        Assert.assertEquals(somaEsperada, somaActual );
         Assert.assertEquals(mealLogCount, mealLogRepository.count());
     }
 
