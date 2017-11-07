@@ -20,4 +20,6 @@ public interface MealLogRepository extends JpaRepository<MealLog,Long> {
     List<MealLog> findByUserIsCurrentUser();
 
     List<MealLog> findByUserAndMealDateTimeAfterOrderByMealDateTimeDesc(User currentUser, Instant minus);
+
+    MealLog findTop1ByUserOrderByMealDateTimeDesc(User currentUser);
 }

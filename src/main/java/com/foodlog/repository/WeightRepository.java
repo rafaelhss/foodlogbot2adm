@@ -1,5 +1,6 @@
 package com.foodlog.repository;
 
+import com.foodlog.domain.User;
 import com.foodlog.domain.Weight;
 import org.springframework.stereotype.Repository;
 
@@ -16,4 +17,5 @@ public interface WeightRepository extends JpaRepository<Weight,Long> {
     @Query("select weight from Weight weight where weight.user.login = ?#{principal.username}")
     List<Weight> findByUserIsCurrentUser();
 
+    Weight findTop1ByUserOrderByWeightDateTimeDesc(User currentUser);
 }
