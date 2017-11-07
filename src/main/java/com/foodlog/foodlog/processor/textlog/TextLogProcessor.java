@@ -1,17 +1,33 @@
 package com.foodlog.foodlog.processor.textlog;
 
+import com.foodlog.domain.MealLog;
+import com.foodlog.foodlog.bot.telegram.factory.MealLogFactory;
 import com.foodlog.foodlog.processor.Processor;
+import com.foodlog.foodlog.processor.photo.PhotoProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 /**
  * Created by rafael on 27/10/17.
  */
 @Component
 public class TextLogProcessor extends Processor {
+    @Autowired
+    MealLogFactory mealLogFactory;
+
+    @Autowired
+    PhotoProcessor photoProcessor;
+
     @Override
     public void process() {
-        System.out.println("Process " + this.getClass().getName());
-        sendMessage("Process " + this.getClass().getName());
+        MealLog mealLog = mealLogFactory.createTextLog(update, getCurrentUser(update));
+        photoProcessor.setUpdate(update);
+
+        String message = photoProcessor.saveMealLogAndGenerateMessage(mealLog);
+
+        sendMessage(message);
     }
 
     @Override

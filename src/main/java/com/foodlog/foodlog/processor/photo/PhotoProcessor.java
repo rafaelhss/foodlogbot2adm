@@ -46,7 +46,7 @@ public class PhotoProcessor extends Processor{
         sendMessage(message);
     }
 
-    private String saveMealLogAndGenerateMessage(MealLog mealLog) {
+    public String saveMealLogAndGenerateMessage(MealLog mealLog) {
         String message;
         MealLog mealLog1 = mealLogRepository.save(mealLog);
         message = People.BLACK_SMILING_FACE.toString();

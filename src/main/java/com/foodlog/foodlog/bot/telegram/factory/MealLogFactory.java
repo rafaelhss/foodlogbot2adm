@@ -7,6 +7,7 @@ import com.foodlog.domain.User;
 import com.foodlog.foodlog.bot.telegram.ApiUrlBuilder;
 import com.foodlog.foodlog.bot.telegram.model.GetFile;
 import com.foodlog.foodlog.bot.telegram.model.Update;
+import com.foodlog.foodlog.util.Util;
 import com.foodlog.repository.ScheduledMealRepository;
 import com.foodlog.repository.UserTelegramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,5 +126,23 @@ public class MealLogFactory {
     //para testes
     public void setScheduledMealRepository(ScheduledMealRepository scheduledMealRepository) {
         this.scheduledMealRepository = scheduledMealRepository;
+    }
+
+    public MealLog createTextLog(Update update, User current) {
+        MealLog mealLog = getBaseMealLog(update, current);
+
+        String texto = update.getMessage().getText();
+        if(texto.toLowerCase().indexOf("meal:") == 0){
+            texto = texto.substring("meal:".length());
+        }
+
+        //Photo
+        byte[] imageBytes = new Util().convertTextToGraphic(texto, new Font("Arial", Font.PLAIN, 14));
+
+        mealLog.setPhoto(DatatypeConverter.parseBase64Binary(DatatypeConverter.printBase64Binary(imageBytes)));
+        mealLog.setPhotoContentType("image/jpg");
+
+        return mealLog;
+
     }
 }
