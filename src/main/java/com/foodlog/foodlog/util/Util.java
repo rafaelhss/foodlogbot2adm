@@ -5,8 +5,12 @@ import com.foodlog.foodlog.bot.telegram.model.Update;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -95,4 +99,18 @@ public class Util {
         return null;
 
     }
+
+
+    public void performHttpGet(URL url){
+        try {
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
