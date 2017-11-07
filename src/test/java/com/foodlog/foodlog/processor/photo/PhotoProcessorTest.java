@@ -110,7 +110,7 @@ public class PhotoProcessorTest {
 
     @Before
     public void setup(){
-        testUtil.createUser();
+testUtil.createUser();
         scheduledMeal = testUtil.createScheduledMeal(Instant.now());
     }
 

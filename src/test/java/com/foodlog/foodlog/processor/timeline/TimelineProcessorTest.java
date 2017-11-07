@@ -59,13 +59,9 @@ public class TimelineProcessorTest {
         Mockito.doNothing().when(utilMock).performHttpGet(Mockito.any());
         timelineProcessor.setUtil(utilMock);
 
-
-
         timelineProcessor.setUpdate(getUpdate());
 
         timelineProcessor.process();
-
-
 
         Mockito.verify(senderMock, Mockito.times(1)).sendResponse(Mockito.eq(153350155), Mockito.any());
 
