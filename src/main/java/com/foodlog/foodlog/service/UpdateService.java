@@ -82,8 +82,8 @@ public class UpdateService {
 
         for (Processor p : processors){
             p.setUpdate(update);
-            System.out.println("### Checando: " + processor.getClass());
-            if(processor.check()){
+            System.out.println("### Checando: " + p.getClass());
+            if(p.check()){
                 processor = p;
                 break;
             }
