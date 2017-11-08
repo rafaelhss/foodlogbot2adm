@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 public class NoneProcessor extends Processor {
        @Override
     public void process() {
-           System.out.println("Process " + this.getClass().getName());
-           sendMessage("Process " + this.getClass().getName());
+           sendMessage("Não entendi o comando. Envie 'ajuda' ou 'tutorial'");
     }
 
     @Override

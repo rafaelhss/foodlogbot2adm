@@ -42,7 +42,7 @@ public class UndoProcessor extends Processor{
 
         Weight weight = weightRepository
             .findTop1ByUserOrderByWeightDateTimeDesc(getCurrentUser(update));
-        if(weight.getWeightDateTime().isAfter(refDate)){
+        if(weight != null && weight.getWeightDateTime().isAfter(refDate)){
             repo = weightRepository;
             idToDelete = weight.getId();
             refDate = weight.getWeightDateTime();
@@ -51,7 +51,7 @@ public class UndoProcessor extends Processor{
 
         BodyLog bodyLog = bodyLogRepository
             .findTop1ByUserOrderByBodyLogDatetimeDesc(getCurrentUser(update));
-        if(bodyLog.getBodyLogDatetime().isAfter(refDate)){
+        if(bodyLog != null && bodyLog.getBodyLogDatetime().isAfter(refDate)){
             repo = bodyLogRepository;
             idToDelete = bodyLog.getId();
             refDate = bodyLog.getBodyLogDatetime();

@@ -77,14 +77,19 @@ public class UpdateService {
         if(processors ==  null){
             init();
         }
-        for (Processor processor : processors){
-            processor.setUpdate(update);
+
+        Processor processor = noneProcessor;
+
+        for (Processor p : processors){
+            p.setUpdate(update);
             System.out.println("### Checando: " + processor.getClass());
             if(processor.check()){
-                System.out.println("### Processando: " + processor.getClass());
-                processor.process();
+                processor = p;
+                break;
             }
         }
+        System.out.println("### Processando: " + processor.getClass());
+        processor.process();
     }
 
 
