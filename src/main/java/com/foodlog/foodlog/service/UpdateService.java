@@ -69,6 +69,7 @@ public class UpdateService {
 
 
     public void processUpdate(Update update){
+        update = adjustTime(update);
         if(processors ==  null){
             init();
         }
@@ -81,7 +82,7 @@ public class UpdateService {
     }
 
 
-    private Update adjustTime(Update update) {
+    protected Update adjustTime(Update update) {
         String regex = "([0-1]\\d|2[0-3]):([0-5]\\d)";
 
         if(Util.checkRegex(update, regex)){  //verifica xx:xx)
