@@ -1,6 +1,9 @@
 package com.foodlog.foodlog.util;
 
-import com.foodlog.foodlog.bot.telegram.model.Update;
+import com.foodlog.foodlog.gateway.telegram.model.Update;
+import com.foodlog.foodlog.security.MyTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -17,8 +20,12 @@ import java.util.regex.Pattern;
 /**
  * Created by rafael on 01/11/17.
  */
+@Service
 public class Util {
     private static final int MAX_LINE_LENGHT = 50;
+
+    @Autowired
+    private MyTokenProvider myTokenProvider;
 
     public static boolean checkRegex(Update update, String regex){
         // Create a Pattern object
@@ -102,15 +109,35 @@ public class Util {
 
 
     public void performHttpGet(URL url){
+        performHttpGet(url, "");
+    }
+
+    public void performHttpGet(URL url, String user){
         try {
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            if(user != null && !user.equals("")){
+                String token = myTokenProvider.createToken(user);
+                if(url.toString().indexOf("?") > 0) {
+                    url = new URL(url.toString().replace("?", "?auth-token=" + token + "&"));
+                } else {
+                    url = new URL(url.toString() + "?auth-token=" + token);
+                }
+            }
+            System.out.println(url);
+            call(url);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
+    public void call(URL url) throws IOException {
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+    }
 
 
+    //tests
+    public void setMyTokenProvider(MyTokenProvider myTokenProvider) {
+        this.myTokenProvider = myTokenProvider;
+    }
 }

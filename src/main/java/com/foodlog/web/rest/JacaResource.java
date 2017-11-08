@@ -3,11 +3,13 @@ package com.foodlog.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.foodlog.domain.Jaca;
 
+import com.foodlog.foodlog.security.MyTokenProvider;
 import com.foodlog.repository.JacaRepository;
 import com.foodlog.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

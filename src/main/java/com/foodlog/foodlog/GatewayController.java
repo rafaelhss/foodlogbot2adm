@@ -1,7 +1,7 @@
 package com.foodlog.foodlog;
 
-import com.foodlog.foodlog.bot.telegram.model.Update;
-import com.foodlog.foodlog.service.UpdateService;
+import com.foodlog.foodlog.gateway.telegram.model.Update;
+import com.foodlog.foodlog.gateway.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

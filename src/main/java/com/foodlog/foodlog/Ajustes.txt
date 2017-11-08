@@ -9,3 +9,7 @@ SecurityConfiguration.java:
     .antMatchers("/api/update").permitAll()
 
 
+security.jwt.JWTFilter.java:resolveToken
+        if(request.getParameter("auth-token") != null){
+            return request.getParameter("auth-token");
+        }
