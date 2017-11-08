@@ -2,6 +2,7 @@ package com.foodlog.foodlog.service;
 
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.processor.Processor;
+import com.foodlog.foodlog.processor.bodylog.BodyLogProcessor;
 import com.foodlog.foodlog.processor.jaca.JacaProcessor;
 import com.foodlog.foodlog.processor.none.NoneProcessor;
 import com.foodlog.foodlog.processor.photo.PhotoProcessor;
@@ -48,6 +49,8 @@ public class UpdateService {
     public RatingProcessor ratingProcessor;
     @Autowired
     public PhotoProcessor photoProcessor;
+    @Autowired
+    public BodyLogProcessor bodyLogProcessor;
 
 
     private List<Processor> processors;

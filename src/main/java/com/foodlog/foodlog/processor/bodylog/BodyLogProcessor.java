@@ -31,15 +31,20 @@ public class BodyLogProcessor extends Processor  {
     @Autowired
     private BodyLogRepository bodyLogRepository;
 
+    private byte[] photo = null;
+    private byte[] imagePeopleBytes = null;
+
     private Util util = new Util();
 
 
     @Override
     public void process() {
-        byte[] photo = bodyLogFactory.getPicture(update);
-        byte[] imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
-
-        System.out.println("imagePeopleBytes: " + imagePeopleBytes);
+        if(this.photo == null) {
+            this.photo = bodyLogFactory.getPicture(update);
+        }
+        if(this.imagePeopleBytes == null) {
+            this.imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
+        }
 
         if(imagePeopleBytes != null) {
             BodyLog bodyLog = new BodyLog();
@@ -50,15 +55,9 @@ public class BodyLogProcessor extends Processor  {
             bodyLog.setUser(getCurrentUser(update));
             bodyLog.setUpdateId(update.getUpdate_id());
 
-            System.out.println("antes");
-
             bodyLogRepository.save(bodyLog);
 
-            System.out.println("depois");
-
             sendMessage("Body Log salvo com sucesso. Vou mandar");
-
-            System.out.println("depois send");
 
             try {
                 URL url = new URL("https://foodlogbotimagebatch.herokuapp.com/bodypanel?userid=" + getCurrentUser(update).getId());
@@ -73,8 +72,8 @@ public class BodyLogProcessor extends Processor  {
     @Override
     public boolean check() {
         if (update.getMessage().getPhoto() != null && update.getMessage().getPhoto().size() > 0) {
-            byte[] photo = bodyLogFactory.getPicture(update);
-            byte[] imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
+            this.photo = bodyLogFactory.getPicture(update);
+            this.imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
             return (imagePeopleBytes != null);
         } else {
             return false;
