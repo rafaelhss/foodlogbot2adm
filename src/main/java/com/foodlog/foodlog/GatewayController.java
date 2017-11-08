@@ -23,6 +23,7 @@ public class GatewayController {
             updateService.processUpdate(update);
         } catch (Exception e) {
             System.out.println("Excexxao ao processar coisa: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
