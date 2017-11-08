@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * Created by rafa on 07/09/17.
@@ -40,7 +41,6 @@ public class PeopleDetector {
     }
 
     public byte[] getPeopleInPhoto(byte[] photo) {
-
 
         BufferedImage image = null;
         try {
@@ -118,7 +118,7 @@ public class PeopleDetector {
            Rect[] facesArray = faces.toArray();
            for (int i = 0; i < facesArray.length; i++)
                Core.rectangle(frame, facesArray[i].tl(), facesArray[i].br(), new Scalar(0, 255, 0, 255), 3);
-           save(frame, "/home/rafa/Documents/Projects/foodlogbotadm/foodlogbotadm/target/teste" + n + ".jpg");
+           //save(frame, "/home/rafa/Documents/Projects/foodlogbotadm/foodlogbotadm/target/teste" + n + ".jpg");
        } catch (Exception e){
            e.printStackTrace();
        }
@@ -127,7 +127,7 @@ public class PeopleDetector {
     private int countPattern(int absoluteFaceSize, MatOfRect faces, Mat grayFrame, CascadeClassifier faceCascadeFace) {
         faceCascadeFace.detectMultiScale(grayFrame, faces, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
             new Size(absoluteFaceSize, absoluteFaceSize), new Size());
-        System.out.println("faces.toArray().length: " + faces.toArray().length);
+
         return faces.toArray().length;
     }
 
@@ -139,14 +139,13 @@ public class PeopleDetector {
         InputStream initialStream = cl.getResourceAsStream(cascadeFile);
 
 
-        System.out.println("stream null: " + (initialStream == null) + "    cascadeFile:" + cascadeFile);
+
 
         File targetFile = new File("targetFile.tmp");
         FileUtils.copyInputStreamToFile(initialStream, targetFile);
 
         boolean carregou = faceCascade.load(targetFile.getName());
 
-        System.out.println("######s##### carregou 2 :  " + carregou);
         return faceCascade;
     }
     private void save(Mat mat, String name)

@@ -3,7 +3,6 @@ package com.foodlog.foodlog.processor.photo;
 import com.foodlog.FoodlogbotadmApp;
 import com.foodlog.domain.MealLog;
 import com.foodlog.domain.ScheduledMeal;
-import com.foodlog.foodlog.bot.telegram.factory.MealLogFactory;
 import com.foodlog.foodlog.bot.telegram.model.Message;
 import com.foodlog.foodlog.bot.telegram.model.Photo;
 import com.foodlog.foodlog.bot.telegram.model.Update;

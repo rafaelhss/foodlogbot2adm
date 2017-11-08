@@ -3,7 +3,7 @@ package com.foodlog.foodlog.processor.photo;
 import com.foodlog.domain.MealLog;
 import com.foodlog.domain.ScheduledMeal;
 import com.foodlog.domain.User;
-import com.foodlog.foodlog.bot.telegram.factory.MealLogFactory;
+
 import com.foodlog.foodlog.emoji.string.Objects;
 import com.foodlog.foodlog.emoji.string.People;
 import com.foodlog.foodlog.openCV.PeopleDetector;
@@ -12,7 +12,6 @@ import com.foodlog.repository.MealLogRepository;
 import com.foodlog.repository.ScheduledMealRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;

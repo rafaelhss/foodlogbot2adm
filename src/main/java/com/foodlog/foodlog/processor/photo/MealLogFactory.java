@@ -1,15 +1,15 @@
-package com.foodlog.foodlog.bot.telegram.factory;
+package com.foodlog.foodlog.processor.photo;
 
 
 import com.foodlog.domain.MealLog;
 import com.foodlog.domain.ScheduledMeal;
 import com.foodlog.domain.User;
 import com.foodlog.foodlog.bot.telegram.ApiUrlBuilder;
+import com.foodlog.foodlog.bot.telegram.Util.TelegramUtil;
 import com.foodlog.foodlog.bot.telegram.model.GetFile;
 import com.foodlog.foodlog.bot.telegram.model.Update;
 import com.foodlog.foodlog.util.Util;
 import com.foodlog.repository.ScheduledMealRepository;
-import com.foodlog.repository.UserTelegramRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -33,19 +33,12 @@ public class MealLogFactory {
     @Autowired
     private ScheduledMealRepository scheduledMealRepository;
 
+    @Autowired
+    private TelegramUtil telegramUtil;
+
+
     public byte[] getPicture(Update update) {
-        int id = update.getMessage().getPhoto().size() -1 ;
-        String file_id = update.getMessage().getPhoto().get(id).getFile_id();
-
-        RestTemplate restTemplate = new RestTemplate();
-        URI getFileurl = ApiUrlBuilder.getGetFile(file_id);
-        GetFile getFile = (GetFile) restTemplate.getForObject(getFileurl, GetFile.class);
-
-        //https://api.telegram.org/file/bot<token>/<file_path>
-
-        String file_path = getFile.getResult().getFile_path();
-        URI getBytesurl = ApiUrlBuilder.getBytesUrl(file_path);
-        return restTemplate.getForObject(getBytesurl, byte[].class);
+        return telegramUtil.getPicture(update);
     }
 
     public MealLog create(Update update, User current) {

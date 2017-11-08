@@ -1,13 +1,11 @@
 package com.foodlog.foodlog.processor.textlog;
 
 import com.foodlog.domain.MealLog;
-import com.foodlog.foodlog.bot.telegram.factory.MealLogFactory;
+import com.foodlog.foodlog.processor.photo.MealLogFactory;
 import com.foodlog.foodlog.processor.Processor;
 import com.foodlog.foodlog.processor.photo.PhotoProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
 
 /**
  * Created by rafael on 27/10/17.
