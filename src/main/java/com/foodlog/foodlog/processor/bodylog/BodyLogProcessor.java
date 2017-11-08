@@ -39,6 +39,8 @@ public class BodyLogProcessor extends Processor  {
         byte[] photo = bodyLogFactory.getPicture(update);
         byte[] imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
 
+        System.out.println("imagePeopleBytes: " + imagePeopleBytes);
+
         if(imagePeopleBytes != null) {
             BodyLog bodyLog = new BodyLog();
             //byte[] imageBytes = new MealLogFactory().getPicture(update);
@@ -48,9 +50,15 @@ public class BodyLogProcessor extends Processor  {
             bodyLog.setUser(getCurrentUser(update));
             bodyLog.setUpdateId(update.getUpdate_id());
 
+            System.out.println("antes");
+
             bodyLogRepository.save(bodyLog);
 
+            System.out.println("depois");
+
             sendMessage("Body Log salvo com sucesso. Vou mandar");
+
+            System.out.println("depois send");
 
             try {
                 URL url = new URL("https://foodlogbotimagebatch.herokuapp.com/bodypanel?userid=" + getCurrentUser(update).getId());
