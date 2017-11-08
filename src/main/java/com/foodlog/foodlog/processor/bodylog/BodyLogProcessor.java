@@ -31,20 +31,13 @@ public class BodyLogProcessor extends Processor  {
     @Autowired
     private BodyLogRepository bodyLogRepository;
 
-    private byte[] photo = null;
-    private byte[] imagePeopleBytes = null;
-
     private Util util = new Util();
 
 
     @Override
     public void process() {
-        if(this.photo == null) {
-            this.photo = bodyLogFactory.getPicture(update);
-        }
-        if(this.imagePeopleBytes == null) {
-            this.imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
-        }
+        byte[] photo = bodyLogFactory.getPicture(update);
+        byte[] imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
 
         if(imagePeopleBytes != null) {
             BodyLog bodyLog = new BodyLog();
@@ -72,8 +65,8 @@ public class BodyLogProcessor extends Processor  {
     @Override
     public boolean check() {
         if (update.getMessage().getPhoto() != null && update.getMessage().getPhoto().size() > 0) {
-            this.photo = bodyLogFactory.getPicture(update);
-            this.imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
+            byte[] photo = bodyLogFactory.getPicture(update);
+            byte[] imagePeopleBytes = peopleDetector.getPeopleInPhoto(photo);
             return (imagePeopleBytes != null);
         } else {
             return false;

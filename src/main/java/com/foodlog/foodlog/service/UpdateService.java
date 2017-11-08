@@ -76,6 +76,7 @@ public class UpdateService {
         for (Processor processor : processors){
             processor.setUpdate(update);
             if(processor.check()){
+                System.out.println("### Processando: " + processor.getClass());
                 processor.process();
             }
         }
