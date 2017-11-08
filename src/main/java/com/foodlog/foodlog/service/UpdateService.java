@@ -68,6 +68,7 @@ public class UpdateService {
         processors.add(jacaProcessor);
         processors.add(ratingProcessor);
         processors.add(photoProcessor);
+        processors.add(bodyLogProcessor);
     }
 
 
@@ -78,6 +79,7 @@ public class UpdateService {
         }
         for (Processor processor : processors){
             processor.setUpdate(update);
+            System.out.println("### Checando: " + processor.getClass());
             if(processor.check()){
                 System.out.println("### Processando: " + processor.getClass());
                 processor.process();
