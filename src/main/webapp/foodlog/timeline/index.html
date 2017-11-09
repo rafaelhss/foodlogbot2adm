@@ -243,8 +243,8 @@
                             data.setHours(item.targetTime.split(":")[0]);
                             data.setMinutes(item.targetTime.split(":")[1]);
 
-                            var start = new Date(data.getTime() - (20*60*1000) );
-                            var end = new Date(data.getTime() + (20*60*1000) );
+                            var start = new Date(data.getTime()).addHours(0.30);
+                            var end = new Date(data.getTime()).addHours(0.30);
                             items.add({
                                 id: i+items.length,
                                 start: start,
