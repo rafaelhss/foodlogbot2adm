@@ -20,6 +20,7 @@ public class WeightProcessor extends Processor{
     @Autowired
     WeightRepository weightRepository;
 
+    @Autowired
     private Util util;
 
     @Override
