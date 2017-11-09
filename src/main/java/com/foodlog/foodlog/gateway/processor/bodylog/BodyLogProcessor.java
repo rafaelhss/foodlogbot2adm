@@ -56,7 +56,7 @@ public class BodyLogProcessor extends Processor  {
             sendMessage("Body Log salvo com sucesso. Vou mandar");
 
             try {
-                URL url = new URL("https://foodlogbotimagebatch.herokuapp.com/bodypanel?userid=" + getCurrentUser(update).getId());
+                URL url = new URL("https://foodlogbotimagebatch.herokuapp.com/bodylog?userid=" + getCurrentUser(update).getId());
                 util.performHttpGet(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
