@@ -54,7 +54,7 @@ public class ReportController {
     }
 
     @CrossOrigin(origins = "*")
-    @RequestMapping("/jaca")
+    @RequestMapping("/jacas")
     public List<Jaca> listJacass(@RequestParam(value="userid") Long userid) {
         User user = userRepository.findOne(userid);
         return jacaRepository.findTop30ByUserOrderByJacaDateTime(user);
