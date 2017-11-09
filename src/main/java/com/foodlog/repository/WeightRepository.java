@@ -18,4 +18,6 @@ public interface WeightRepository extends JpaRepository<Weight,Long> {
     List<Weight> findByUserIsCurrentUser();
 
     Weight findTop1ByUserOrderByWeightDateTimeDesc(User currentUser);
+
+    List<Weight> findTop30ByUserOrderByWeightDateTimeDesc(User user);
 }

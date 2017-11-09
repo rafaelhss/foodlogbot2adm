@@ -18,4 +18,6 @@ public interface BodyLogRepository extends JpaRepository<BodyLog,Long> {
     List<BodyLog> findByUserIsCurrentUser();
 
     BodyLog findTop1ByUserOrderByBodyLogDatetimeDesc(User currentUser);
+
+    List<BodyLog> findByUserOrderByBodyLogDatetime(User user);
 }

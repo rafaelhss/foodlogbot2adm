@@ -1,6 +1,7 @@
 package com.foodlog.repository;
 
 import com.foodlog.domain.Jaca;
+import com.foodlog.domain.User;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
@@ -16,4 +17,5 @@ public interface JacaRepository extends JpaRepository<Jaca,Long> {
     @Query("select jaca from Jaca jaca where jaca.user.login = ?#{principal.username}")
     List<Jaca> findByUserIsCurrentUser();
 
+    List<Jaca> findTop30ByUserOrderByJacaDateTime(User user);
 }
