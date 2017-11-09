@@ -38,7 +38,7 @@ public class WeightProcessor extends Processor{
         sendMessage("Peso (" + value + ") salvo com sucesso.");
 
         try {
-            util.performHttpGet(new URL("https://foodlogbotimagebatch.herokuapp.com/?userid=" + currentUser.getId()), currentUser.getLogin());
+            util.performHttpGet(new URL("https://foodlogbotimagebatch.herokuapp.com/weight?userid=" + currentUser.getId()), currentUser.getLogin());
         } catch (IOException e) {
             e.printStackTrace();
         }
