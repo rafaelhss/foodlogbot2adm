@@ -22,4 +22,8 @@ public interface ScheduledMealRepository extends JpaRepository<ScheduledMeal,Lon
     List<ScheduledMeal> findByUser(User currentUser);
 
     List<ScheduledMeal> findByOrderByTargetTimeDesc();
+
+    List<ScheduledMeal> findByUserOrderByTargetTime(User one);
+
+    List<ScheduledMeal> findByUserOrderByTargetTimeDesc(User currentUser);
 }
