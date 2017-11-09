@@ -30,7 +30,8 @@ public class BodyLogProcessor extends Processor  {
     private byte[] photo = null;
     private byte[] imagePeopleBytes = null;
 
-    private Util util = new Util();
+    @Autowired
+    private Util util;
 
 
     @Override
