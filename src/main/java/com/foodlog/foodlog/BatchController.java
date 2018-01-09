@@ -6,15 +6,9 @@ import com.foodlog.foodlog.report.bodylog.BodyLogService;
 import com.foodlog.foodlog.report.timeline.MealLogDayService;
 import com.foodlog.foodlog.report.timeline.dayStats.DayStats;
 import com.foodlog.foodlog.report.timeline.dayStats.DayStatsService;
-import com.foodlog.repository.JacaRepository;
-import com.foodlog.repository.ScheduledMealRepository;
-import com.foodlog.repository.UserRepository;
-import com.foodlog.repository.WeightRepository;
+import com.foodlog.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.time.LocalTime;
@@ -31,40 +25,33 @@ import java.util.stream.Collectors;
 public class BatchController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private BodyLogService bodyLogService;
-
-    @Autowired
-    private JacaRepository jacaRepository;
-
-    @Autowired
-    private WeightRepository weightRepository;
-
-    @Autowired
     private ScheduledMealRepository scheduledMealRepository;
 
     @Autowired
-    private DayStatsService dayStatsService;
+    private UserTelegramRepository userTelegramRepository;
 
     @Autowired
-    private MealLogDayService mealLogDayService;
+    private UserRepository userRepository;
 
 
     @CrossOrigin(origins = "*")
-    @RequestMapping("/scheduled-meals")
-    public List<ScheduledMeal> getUserTelegram(@RequestParam(value="minute-window", defaultValue = "30") Long userid) {
-        //TODO Ajustar quando mudar o tipo do target time
-        return scheduledMealRepository.findByOrderByTargetTimeDesc()
-            .stream()
-            .filter(meal -> checkTime(meal))
-            .collect(Collectors.toList());
+    @RequestMapping("/user-telegrams/{user-id}")
+    public UserTelegram getUserTelegram(@PathVariable(value="user-id") Long userId) {
+
+        System.out.println("Userid:" + userId);
+        User user = userRepository.findOne(userId);
+
+        System.out.println("User: " + user);
+
+        return userTelegramRepository.findOneByUser(user);
+
     }
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/scheduled-meals")
-    public List<ScheduledMeal> getAllScheduledMeals(@RequestParam(value="minute-window", defaultValue = "30") Long userid) {
+    public List<ScheduledMeal> getAllScheduledMeals(@RequestParam(value="minute-window", defaultValue = "30") Long minuteWindow) {
         //TODO Ajustar quando mudar o tipo do target time
+        //TODO usar time window
         return scheduledMealRepository.findByOrderByTargetTimeDesc()
             .stream()
             .filter(meal -> checkTime(meal))

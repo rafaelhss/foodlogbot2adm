@@ -1,5 +1,6 @@
 package com.foodlog.repository;
 
+import com.foodlog.domain.User;
 import com.foodlog.domain.UserTelegram;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,6 @@ public interface UserTelegramRepository extends JpaRepository<UserTelegram,Long>
 
 
     UserTelegram findOneByTelegramId(Integer id);
+
+    UserTelegram findOneByUser(User user);
 }
