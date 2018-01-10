@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,20 +46,19 @@ public class BatchController {
 
         for(User currentUser : userRepository.findAll()) {
 
-            Instant past = Instant.now().minus(elapsedHour, ChronoUnit.HOURS);
-
-            MealLog mealLog = mealLogRepository.findTop1ByUserAndMealDateTimeLessThanOrderByMealDateTimeDesc(currentUser, past);
+            MealLog mealLog = mealLogRepository.findTop1ByUserOrderByMealDateTimeDesc(currentUser);
 
             if(mealLog != null) {
-                if(removePhoto){
-                    mealLog.setPhoto(null);
+                long elapsedMealTime = Duration.between(mealLog.getMealDateTime(), Instant.now()).getSeconds() / (60 * 60);
+                if(elapsedMealTime >= elapsedHour) {
+                    if (removePhoto) {
+                        mealLog.setPhoto(null);
+                    }
+                    result.add(mealLog);
                 }
-                result.add(mealLog);
             }
         }
-
         return result;
-
     }
 
 
