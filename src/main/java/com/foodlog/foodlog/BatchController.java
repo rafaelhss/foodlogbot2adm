@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,6 +35,35 @@ public class BatchController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MealLogRepository mealLogRepository;
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping("/meal-logs")
+    public List<MealLog> getLastElapsedUserMealLogs(@RequestParam(value="elapsed-hours", defaultValue = "3") Integer elapsedHour,
+                                                    @RequestParam(value="remove-photo", defaultValue = "true") Boolean removePhoto
+    ) {
+
+        List<MealLog> result = new ArrayList<>();
+
+        for(User currentUser : userRepository.findAll()) {
+
+            Instant past = Instant.now().minus(elapsedHour, ChronoUnit.HOURS);
+
+            MealLog mealLog = mealLogRepository.findTop1ByUserAndMealDateTimeLessThanOrderByMealDateTimeDesc(currentUser, past);
+
+            if(mealLog != null) {
+                if(removePhoto){
+                    mealLog.setPhoto(null);
+                }
+                result.add(mealLog);
+            }
+        }
+
+        return result;
+
+    }
 
 
     @CrossOrigin(origins = "*")
