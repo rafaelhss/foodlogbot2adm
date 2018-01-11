@@ -25,7 +25,7 @@
 </head>
 <body ng-app="weightApp" ng-controller="weightCtrl">
 
-samba
+Evolution
 
 <vis-graph2d data="data" options="options"></vis-graph2d>
 
@@ -80,6 +80,19 @@ samba
                                 style: 'square' // square, circle
                             }
                         }});
+                    
+                    groups.add({
+                        id: 4,
+                        content: 'DayScore',
+                        //style: 'fill:red; stroke:red; stroke-width:0;fill-opacity:0.1;fill:red;',
+                        options: {
+                            style:'bar',
+                            drawPoints: {
+                                size: 1,
+                                //styles: 'fill:red; stroke:red;',
+                                style: 'square' // square, circle
+                            }
+                        }});                    
 
                     return groups;
                 } //fim create groups
@@ -100,14 +113,18 @@ samba
 
 
                 var maxWeight = 0;
-                var url = "../../api/reports/weights" + window.location.href.substring(window.location.href.indexOf('?'));
+                var minWeight = 200;
+                
+                var url = "../../api/reports/evolution-timeline" + window.location.href.substring(window.location.href.indexOf('?'));
                 $http.get(url).then(function(data){
                     var items = [];
                     var lastValue = 0;
-                    data.data.reverse().forEach(function(item, index){
+                    console.log(data)
+                    
+                    data.data.weightList.reverse().forEach(function(item, index){
                         var today = new Date(item.weightDateTime).addHours((Number(utcOffset) * 60 * 60 * 1000));
                         var period = 0;
-                         if (today.getHours() >= 12){
+                        if (today.getHours() >= 12){
                              if (today.getHours() >= 18){
                                 period = 2
                              } else {
@@ -120,55 +137,64 @@ samba
                             cssclass = "red";
                         }
 
-                        console.log(item.weightDateTime)
-                        console.log(today)
                         items.push({x: today, y: item.value, group: period, label: {content:item.value,  xOffset: -65, className: cssclass}});
 
+                        
                         lastValue = item.value;
                         if(item.value > maxWeight){
                             maxWeight = item.value;
                         }
+                        if(item.value < minWeight){
+                            minWeight = item.value;
+                        }
                     })
-
-                    var url = "../../api/reports/jacas"  + window.location.href.substring(window.location.href.indexOf('?'));
-                    $http.get(url).then(function(data){
-                        data.data.reverse().forEach(function(item, index){
-
-                            var today = new Date(item.jacaDateTime).addHours((Number(utcOffset) * 60 * 60 * 1000));
-                            var cssclass = "normal";
-                            items.push({x: today, y: 100, group: 3, label: {content:'Jaca',  xOffset: -20, className: cssclass}});
-                        })
-
+                    
+                    
+                    console.log("max:" + maxWeight)
+                    console.log("min:" + minWeight)
+                    
+                   
+                    var step = maxWeight - minWeight;
+                    
+                    data.data.dayScoreList.reverse().forEach(function(item, index){
+                        console.log(item)
+                        var today = new Date(item.weightDateTime).addHours((Number(utcOffset) * 60 * 60 * 1000));
+                        var cssclass = "red";
+                        
+                        console.log(today)
+                        
+                        var normalized = (item.score * step) + minWeight
+                        
+                        items.push({x: new Date(), y: normalized, group: 1, label: {content:normalized,  xOffset: -65, className: "red"}});
+    
                         $scope.data = {items: new vis.DataSet(items), groups: groups};
+                    });
+                    
 
-                    }, function(error){
-                        console.log("erro jaca")
-                        console.log(error);
-                    })
+                    
+                    
+                    $scope.data = {items: new vis.DataSet(items), groups: groups};
+                        
+                    
                 }, function(error){
                     console.log("ERROR");
                     console.log(error);
                 });
+                
 
                 function getUrlParameter(param, dummyPath) {
-                        var sPageURL = dummyPath || window.location.search.substring(1),
-                            sURLVariables = sPageURL.split(/[&||?]/),
-                            res;
-
-                        for (var i = 0; i < sURLVariables.length; i += 1) {
-                            var paramName = sURLVariables[i],
-                                sParameterName = (paramName || '').split('=');
-
-                            if (sParameterName[0] === param) {
-                                res = sParameterName[1];
-                            }
+                    var sPageURL = dummyPath || window.location.search.substring(1),
+                        sURLVariables = sPageURL.split(/[&||?]/),
+                        res;
+                    for (var i = 0; i < sURLVariables.length; i += 1) {
+                        var paramName = sURLVariables[i],
+                            sParameterName = (paramName || '').split('=');
+                        if (sParameterName[0] === param) {
+                            res = sParameterName[1];
                         }
-
-                        return res;
+                    }
+                    return res;
                 }
-
-
-
 
             });
         </script>

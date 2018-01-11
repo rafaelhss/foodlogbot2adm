@@ -15,10 +15,15 @@ import com.foodlog.repository.ScheduledMealRepository;
 import com.foodlog.repository.UserRepository;
 import com.foodlog.repository.WeightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 /**
@@ -65,11 +70,29 @@ public class ReportController {
         return bodyLogService.getBodyPanel(user);
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) throws Exception {
+        final DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        final CustomDateEditor dateEditor = new CustomDateEditor(df, true) {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                if ("today".equals(text)) {
+                    setValue(Instant.now());
+                } else if ("yesterday".equals(text)){
+                    setValue(Instant.now().minus(1, ChronoUnit.DAYS));
+                } else if ("30daysago".equals(text)){
+                    setValue(Instant.now().minus(30, ChronoUnit.DAYS));
+                }
+            }
+        };
+        binder.registerCustomEditor(Instant.class, dateEditor);
+    }
+
     @CrossOrigin(origins = "*")
     @RequestMapping("/weights")
     public List<Weight> listWeightsByUser(@RequestParam(value="userid") Long userid,
-                                          @RequestParam(value="init-date") Instant initDate,
-                                          @RequestParam(value="end-date") Instant endDate) {
+                                          @RequestParam(value="init-date", defaultValue = "30daysago") Instant initDate,
+                                          @RequestParam(value="end-date", defaultValue = "today") Instant endDate) {
         User user = userRepository.findOne(userid);
         return weightRepository.findByUserAndWeightDateTimeBetweenOrderByWeightDateTimeDesc(user, initDate, endDate);
     }
@@ -77,9 +100,9 @@ public class ReportController {
     @CrossOrigin(origins = "*")
     @RequestMapping("/evolution-timeline")
     public EvolutionTimeline getEvolutionTimeline(@RequestParam(value="userid") Long userid,
-                                                  @RequestParam(value="init-date") Instant initDate,
-                                                  @RequestParam(value="end-date") Instant endDate) {
-        User user = userRepository.findOne(userid);
+                                                  @RequestParam(value="init-date", defaultValue = "30daysago") Instant initDate,
+                                                  @RequestParam(value="end-date", defaultValue = "today") Instant endDate) {
+
         return evolutionTimelineService.getEvolutionTimeline(userid, initDate, endDate);
     }
 
