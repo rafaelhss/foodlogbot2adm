@@ -5,6 +5,8 @@ import com.foodlog.foodlog.gateway.service.UpdateService;
 import com.foodlog.foodlog.gateway.telegram.model.Update;
 import com.foodlog.foodlog.report.bodylog.BodyLogImage;
 import com.foodlog.foodlog.report.bodylog.BodyLogService;
+import com.foodlog.foodlog.report.evolution.EvolutionTimeline;
+import com.foodlog.foodlog.report.evolution.EvolutionTimelineService;
 import com.foodlog.foodlog.report.timeline.MealLogDayService;
 import com.foodlog.foodlog.report.timeline.dayStats.DayStats;
 import com.foodlog.foodlog.report.timeline.dayStats.DayStatsService;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -45,6 +48,9 @@ public class ReportController {
     @Autowired
     private MealLogDayService mealLogDayService;
 
+    @Autowired
+    private EvolutionTimelineService evolutionTimelineService;
+
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/body-log")
@@ -61,10 +67,22 @@ public class ReportController {
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/weights")
-    public List<Weight> listWeights(@RequestParam(value="userid") Long userid) {
+    public List<Weight> listWeightsByUser(@RequestParam(value="userid") Long userid,
+                                          @RequestParam(value="init-date") Instant initDate,
+                                          @RequestParam(value="end-date") Instant endDate) {
         User user = userRepository.findOne(userid);
-        return weightRepository.findTop30ByUserOrderByWeightDateTimeDesc(user);
+        return weightRepository.findByUserAndWeightDateTimeBetweenOrderByWeightDateTimeDesc(user, initDate, endDate);
     }
+
+    @CrossOrigin(origins = "*")
+    @RequestMapping("/evolution-timeline")
+    public EvolutionTimeline getEvolutionTimeline(@RequestParam(value="userid") Long userid,
+                                                  @RequestParam(value="init-date") Instant initDate,
+                                                  @RequestParam(value="end-date") Instant endDate) {
+        User user = userRepository.findOne(userid);
+        return evolutionTimelineService.getEvolutionTimeline(userid, initDate, endDate);
+    }
+
 
     @CrossOrigin(origins = "*")
     @RequestMapping("/jacas")

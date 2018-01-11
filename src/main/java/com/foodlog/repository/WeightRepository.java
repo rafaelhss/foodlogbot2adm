@@ -5,6 +5,8 @@ import com.foodlog.domain.Weight;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.jpa.repository.*;
+
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -19,5 +21,5 @@ public interface WeightRepository extends JpaRepository<Weight,Long> {
 
     Weight findTop1ByUserOrderByWeightDateTimeDesc(User currentUser);
 
-    List<Weight> findTop30ByUserOrderByWeightDateTimeDesc(User user);
+    List<Weight> findByUserAndWeightDateTimeBetweenOrderByWeightDateTimeDesc(User user, Instant initDate, Instant endDate);
 }
