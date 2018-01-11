@@ -22,7 +22,7 @@ public class TimelineProcessor extends Processor {
         sendMessage("Sua Timeline sera gerada...");
 
         try {
-            URL url = new URL("https://foodlogbotimagebatch.herokuapp.com/timeline?userid=" + getCurrentUser(update).getId());
+            URL url = new URL("https://foodlogbot2adm.herokuapp.com/foodlog/timeline/index.html?userid=" + getCurrentUser(update).getId());
 
             util.performHttpGet(url, getCurrentUser(update).getLogin());
         } catch (MalformedURLException e) {
