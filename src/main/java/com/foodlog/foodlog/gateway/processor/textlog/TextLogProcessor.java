@@ -24,6 +24,7 @@ public class TextLogProcessor extends Processor {
         photoProcessor.setUpdate(update);
 
         String message = photoProcessor.saveMealLogAndGenerateMessage(mealLog);
+        message += "   Avalie enviando uma nota entre 0 e 5";
 
         sendMessage(message);
     }
