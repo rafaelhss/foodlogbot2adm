@@ -1,5 +1,6 @@
 package com.foodlog.foodlog.gateway.service;
 
+import com.foodlog.foodlog.gateway.processor.activity.ActivityProcessor;
 import com.foodlog.foodlog.gateway.telegram.model.Update;
 import com.foodlog.foodlog.gateway.processor.Processor;
 import com.foodlog.foodlog.gateway.processor.bodylog.BodyLogProcessor;
@@ -51,6 +52,8 @@ public class UpdateService {
     public PhotoProcessor photoProcessor;
     @Autowired
     public BodyLogProcessor bodyLogProcessor;
+    @Autowired
+    public ActivityProcessor activityProcessor;
 
 
     private List<Processor> processors;
@@ -69,6 +72,7 @@ public class UpdateService {
         processors.add(ratingProcessor);
         processors.add(photoProcessor);
         processors.add(bodyLogProcessor);
+        processors.add(activityProcessor);
     }
 
 
