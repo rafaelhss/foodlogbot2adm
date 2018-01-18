@@ -74,10 +74,13 @@ public class EvolutionTimelineService {
     private void getDayStats(Long userid, Instant initDate, Instant endDate, EvolutionTimeline result) {
         List<MealLogScore> mealLogScoreList = mealLogScoreRepository.getMealLogScore(userid, initDate, endDate);
 
+        mealLogScoreList.stream().forEach(mealLogScore -> System.out.println("MeallogScore: " + mealLogScore.getRating() + " - " + mealLogScore.getMealDateTime()));
+
+
         Map<Instant, Double> averageRating = mealLogScoreList.stream().collect(
             Collectors.groupingBy(m -> m.getMealDateTime().truncatedTo(ChronoUnit.DAYS), Collectors.averagingInt(MealLogScore::getRating)));
 
-        System.out.println("hhhhhhhhhhhhhhh");
+
         List<DayScore> dayScoreList = averageRating.entrySet().stream()
             .map(a -> {
                     DayScore dayScore = new DayScore();
