@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -82,6 +83,12 @@ public class ReportController {
                     setValue(Instant.now().minus(1, ChronoUnit.DAYS));
                 } else if ("30daysago".equals(text)){
                     setValue(Instant.now().minus(30, ChronoUnit.DAYS));
+                } else {
+                    try {
+                        setValue(df.parse(text));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };
