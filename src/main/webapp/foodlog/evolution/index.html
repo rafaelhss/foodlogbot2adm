@@ -13,12 +13,7 @@
           fill: red;
           font-size: 150%;
         }
-        
-        .rating5{
-            fill: green;
-            border-style: dotted;
-        }
-        
+
         .normal {
           font-size: 150%;
         }
@@ -26,19 +21,26 @@
             width: 90vw;
             margin: 0 auto;
         }
-        
-        #bodylogs {
+    
+        .container {
+          width: 100%;
+          position: relative;
           padding: 0;
           margin-left: auto;
           margin-right: auto;
           margin-top: 20px;
           text-align: center;
         }
-        #bodylogs img {
-          width: 22%;
+
+        .block {
+          display:inline-block;
+          font-size: 200%;
+        }
+        .bodylog {
+          width: 200px;
+            
           vertical-align: middle;
         }
-        
     </style>
 
 </head>
@@ -49,8 +51,19 @@ Evolution
 <vis-graph2d data="data" options="options"></vis-graph2d>
 
 <div>
-    <div id="bodylogs">
-        <img class="bodylog" ng-repeat="bodylog in bodyLogList" ng-src="data:{{bodylog.photoContentType}};base64,{{bodylog.photo}}"  alt="mealLog image"/>
+   <!-- <div id="bodylogs">
+        <div  ng-repeat="bodylog in bodyLogList">
+            <img class="bodylog" ng-src="data:{{bodylog.photoContentType}};base64,{{bodylog.photo}}"  alt="mealLog image"/>
+        </div>
+        
+    </div>
+    -->
+    <div class="container">
+        <div class="block" ng-repeat="bodylog in bodyLogList | orderBy : 'bodyLogDatetime'">
+            <img class="bodylog" ng-src="data:{{bodylog.photoContentType}};base64,{{bodylog.photo}}"  alt="mealLog image"/>
+            <br/>
+            <p>{{bodylog.bodyLogDatetime | date:'dd/MM'}}</p>
+        </div>
     </div>
     
 </div>
