@@ -78,7 +78,13 @@ public class EvolutionTimelineService {
 
 
         Map<Instant, Double> averageRating = mealLogScoreList.stream().collect(
-            Collectors.groupingBy(m -> m.getMealDateTime().truncatedTo(ChronoUnit.DAYS), Collectors.averagingInt(MealLogScore::getRating)));
+            Collectors.groupingBy(m -> m.getMealDateTime().truncatedTo(ChronoUnit.DAYS),
+                Collectors.averagingInt(m -> { if(m.getRating() == null) {
+                                                    return 3;
+                                                } else {
+                                                    return m.getRating();
+                                                }
+                                            })));
 
 
         List<DayScore> dayScoreList = averageRating.entrySet().stream()
