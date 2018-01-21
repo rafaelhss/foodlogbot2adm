@@ -78,9 +78,8 @@
 
 </head>
 
-<body ng-cloak ng-app="timelineApp" ng-controller="timelineCtrl">
+<body>
 
-<h1>SMAMABA</h1>SAMBA
     <div>
     <!--
 
@@ -106,9 +105,9 @@
             </div>
             <br style="clear: both;" />
 
-        <div class="container-fluid" ng-app="timelineApp" ng-controller="timelineCtrl">
+        <div class="container-fluid"  ng-cloak ng-app="timelineApp" ng-controller="timelineCtrl">
             <div class="row" >
-                <div ng-repeat="meallog in (correctMealLogs = (meallogs | orderBy:mealDateTime:true))" class="col-xs-4 xcol-xs-offset-2" style="background-color:lavenderblush;">
+                <div ng-repeat="meallog in (correctMealLogs = (meallogs | orderBy:mealDateTime:true))" class="col-xs-4 xcol-xs-offset-2 col-sm-4 xcol-sm-offset-2 col-md-4 xcol-md-offset-2 col-lg-4 xcol-lg-offset-2" style="background-color:lavenderblush;">
                     <h3>{{meallog.scheduledMeal.name}}</h3>
                     <img ng-src="data:{{meallog.photoContentType}};base64,{{meallog.photo}}"  alt="mealLog image"/>
 
