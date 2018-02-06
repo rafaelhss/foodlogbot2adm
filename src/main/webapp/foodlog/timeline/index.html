@@ -2,10 +2,10 @@
 <head>
 
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../bower_components/angular/angular.min.js"></script>
+
 
 
     <style type="text/css">
@@ -19,7 +19,7 @@
     }
     img{
         max-width: 100%;
-        max-height: auto;   
+        max-height: auto;
     }
 
     body {
@@ -51,10 +51,10 @@
         border-radius: 25px;
         background: #73AD21;
         width: 40px;
-        height: 40px; 
+        height: 40px;
         box-shadow: 5px 5px 5px #888888;
     }
-        
+
     .rating1{
         background: #FF0000;
     }
@@ -70,7 +70,7 @@
     .rating5{
         background: #33CC33;
     }
-    
+
   </style>
 
 
@@ -79,6 +79,7 @@
 </head>
 
 <body>
+
     <div>
     <!--
 
@@ -103,18 +104,18 @@
 
             </div>
             <br style="clear: both;" />
-            
-        <div class="container-fluid" ng-app="timelineApp" ng-controller="timelineCtrl">
+
+        <div class="container-fluid"  ng-cloak ng-app="timelineApp" ng-controller="timelineCtrl">
             <div class="row" >
-                <div ng-repeat="meallog in (correctMealLogs = (meallogs | orderBy:mealDateTime:true))" class="col-xs-4 xcol-xs-offset-2" style="background-color:lavenderblush;">
+                <div ng-repeat="meallog in (correctMealLogs = (meallogs | orderBy:mealDateTime:true))" class="col-xs-4 xcol-xs-offset-2 col-sm-4 xcol-sm-offset-2 col-md-4 xcol-md-offset-2 col-lg-4 xcol-lg-offset-2" style="background-color:lavenderblush;">
                     <h3>{{meallog.scheduledMeal.name}}</h3>
                     <img ng-src="data:{{meallog.photoContentType}};base64,{{meallog.photo}}"  alt="mealLog image"/>
-                    
+
                     <h1 style="float: left;">{{calcDateDiff(correctMealLogs[$index].mealDateTime,correctMealLogs[$index -1].mealDateTime)}}
                     </h1>
                     <div style="float: right" class="mealLogRating" ng-class="'rating'+{{meallog.rating}}"></div>
-                    
-                    
+
+
                 </div>
             </div>
 
@@ -129,21 +130,21 @@
 
 </body>
 <script>
-    
+
     var app = angular.module("timelineApp",[]);
     app.controller("timelineCtrl", function($scope, $http){
         var host = ""; //"http://foodlogbot2adm.herokuapp.com";
         $http.get(host + "/api/reports/meal-log"+ window.location.href.substring(window.location.href.indexOf('?')))
                   .then(function(data){
             $scope.meallogs = data.data;
-            
+
         });
-        
-        
+
+
         $scope.calcDateDiff = function(date1, date2){
             if(date1 != undefined && date2 != undefined){
                 var timeDiff = Math.abs(new Date(date2).getTime() - new Date(date1).getTime());
-                
+
                 // strip the ms
                 timeDiff /= 1000;
 
@@ -167,16 +168,16 @@
 
                 // the rest of timeDiff is number of days
                 var days = timeDiff ;
-                
+
                 return hours + "h:" + minutes +"m";
 
             }
             return "";
         }
     });
-    
+
      var host = "";//"http://foodlogbot2adm.herokuapp.com";
-       
+
     document.getElementById("today").innerHTML = new Date().toJSON().slice(0,10).replace(/-/g,'/');
 
     //score
@@ -205,6 +206,6 @@
 
 
 
-            
+
 </script>
 </html>
