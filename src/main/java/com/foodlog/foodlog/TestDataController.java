@@ -1,19 +1,16 @@
 package com.foodlog.foodlog;
 
-import com.foodlog.domain.BodyLog;
-import com.foodlog.domain.MealLog;
-import com.foodlog.domain.User;
-import com.foodlog.domain.Weight;
+import com.foodlog.domain.*;
 import com.foodlog.foodlog.gateway.telegram.ApiUrlBuilder;
 import com.foodlog.foodlog.gateway.telegram.model.GetFile;
 import com.foodlog.foodlog.gateway.telegram.model.Update;
 import com.foodlog.foodlog.report.bodylog.BodyLogImage;
-import com.foodlog.repository.BodyLogRepository;
-import com.foodlog.repository.MealLogRepository;
-import com.foodlog.repository.UserRepository;
-import com.foodlog.repository.WeightRepository;
+import com.foodlog.repository.*;
+import com.foodlog.security.AuthoritiesConstants;
+import com.foodlog.service.util.RandomUtil;
 import com.google.common.io.ByteStreams;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,7 +22,9 @@ import java.io.InputStream;
 import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by rafael on 18/01/18.
@@ -46,7 +45,41 @@ public class TestDataController {
     @Autowired
     private MealLogRepository mealLogRepository;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @CrossOrigin(origins = "*")
+    @RequestMapping("/user")
+    public User createUser(@RequestParam(value="telegram") Long telegram, @RequestParam(value="name") String name) {
+        User user = new User();
+        user.setLogin(name);
+        user.setFirstName(name);
+        user.setLastName(name);
+        //user.setEmail("teste@teste.com");
+        user.setLangKey("en"); // default language
+
+        Authority authority = new Authority();
+        authority.setName(AuthoritiesConstants.USER);
+        Set<Authority> authorities = new HashSet<>();
+        authorities.add(authorityRepository.findOne(AuthoritiesConstants.USER));
+        user.setAuthorities(authorities);
+
+        String encryptedPassword = passwordEncoder.encode("teste");
+        user.setPassword(encryptedPassword);
+        user.setResetKey(RandomUtil.generateResetKey());
+        user.setResetDate(Instant.now());
+        user.setActivated(true);
+        userRepository.save(user);
+        return user;
+
+    }
+
+
+
+        @CrossOrigin(origins = "*")
     @RequestMapping("/init")
     public Boolean init(@RequestParam(value="userid") Long userid,
                                      @RequestParam(value="base-date") Instant initDate) {
@@ -76,16 +109,7 @@ public class TestDataController {
                 createMealog(initDate.minus(i, ChronoUnit.DAYS), user);
             }
         }
-
-
-
-
-
         return true;
-
-
-
-
     }
 
     private void createMealog(@RequestParam(value = "base-date") Instant initDate, User user) {
