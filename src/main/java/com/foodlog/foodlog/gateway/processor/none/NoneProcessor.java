@@ -16,8 +16,7 @@ public class NoneProcessor extends Processor {
 
     @Override
     public void process() {
-           sendMessage("Não entendi o comando. Envie 'ajuda' ou 'tutorial'");
-        System.out.println("### Token: " + myTokenProvider.createToken(getCurrentUser(update).getLogin()));
+       sendMessage("Não entendi o comando. Envie 'ajuda' ou 'tutorial'");
     }
 
     @Override
