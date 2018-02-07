@@ -12,6 +12,7 @@ import com.foodlog.service.util.RandomUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Instant;
@@ -22,6 +23,7 @@ import java.util.Set;
 /**
  * Created by rafael on 06/02/18.
  */
+@Service
 public class NewUserProcessor extends Processor {
 
     @Autowired
